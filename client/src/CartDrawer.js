@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Drawer,
   Box,
@@ -75,22 +76,15 @@ export default function CartDrawer({ open, onClose }) {
             sx={{ fontWeight: 800, mb: 1, py: 1.2, borderRadius: 2 }} 
             onClick={async () => {
                 try {
-                    const response = await fetch('/api/products/purchase', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ items: cart })
-                    });
-                    const data = await response.json();
-                    if (response.ok) {
+                    const response = await axios.post('/api/products/purchase', { items: cart });
+                    if (response.status === 200) { // axios statuses are numbers
                         alert('Purchase successful!');
                         clearCart();
                         onClose();
-                        window.location.reload(); // To refresh stock on catalog
-                    } else {
-                        alert(data.error || 'Purchase failed');
+                        window.location.reload(); 
                     }
                 } catch (e) {
-                    alert('Error processing purchase');
+                    alert(e.response?.data?.error || 'Error processing purchase');
                 }
             }} 
             disabled={cart.length === 0}

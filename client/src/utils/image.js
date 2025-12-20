@@ -1,8 +1,5 @@
 export const API_ORIGIN =
-  process.env.REACT_APP_API_ORIGIN ||
-  (typeof window !== 'undefined'
-    ? `${window.location.protocol}//${window.location.hostname}:5000`
-    : 'http://localhost:5000');
+  process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export function resolveImageUrl(src) {
   if (!src) return '/no-image.png';
