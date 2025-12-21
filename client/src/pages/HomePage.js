@@ -28,7 +28,7 @@ import MonitorHeartRoundedIcon from '@mui/icons-material/MonitorHeartRounded';
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
 import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
+
 import axios from 'axios';
 import { resolveImageUrl } from '../utils/image';
 import '../App.css';

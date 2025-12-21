@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../AuthContext';
 import { useCart } from '../CartContext';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Box, Typography, Card, CardMedia, Chip, Stack, Divider, CircularProgress, Alert, Container, Grid, Paper, Button, Snackbar } from '@mui/material';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -11,9 +12,11 @@ import { resolveImageUrl } from '../utils/image';
 
 export default function ProductDetailsPage() {
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const [snack, setSnack] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [p, setP] = useState(null);
@@ -182,7 +185,13 @@ export default function ProductDetailsPage() {
       fontSize: '1.1rem',
       boxShadow: '0 8px 32px rgba(253,93,93,0.4)'
     }}
-    onClick={() => { addToCart(p); setSnack(true); }}
+    onClick={() => { 
+      if (!user) {
+        navigate('/login', { state: { from: location } });
+        return;
+      }
+      addToCart(p); setSnack(true); 
+    }}
     disabled={p.stock === 0}
   >
     {p.stock === 0 ? 'Out of Stock' : 'Add to Cart'}

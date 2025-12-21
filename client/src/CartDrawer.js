@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
   Box,
@@ -21,6 +23,8 @@ import { useCart } from './CartContext';
 
 export default function CartDrawer({ open, onClose }) {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -75,6 +79,11 @@ export default function CartDrawer({ open, onClose }) {
             color="primary" 
             sx={{ fontWeight: 800, mb: 1, py: 1.2, borderRadius: 2 }} 
             onClick={async () => {
+                if (!user) {
+                  onClose();
+                  navigate('/login');
+                  return;
+                }
                 try {
                     const response = await axios.post('/api/products/purchase', { items: cart });
                     if (response.status === 200) { // axios statuses are numbers
